@@ -1,30 +1,80 @@
-<!doctype html>
-<head>
-    <title>Hello Azure - Python Quickstart</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-</head>
-<html>
-   <body>
-     <main>
-        <div class="px-4 py-3 my-2 text-center">
-            <img class="d-block mx-auto mb-4" src="{{ url_for('static', filename='images/azure-icon.svg') }}" alt="Azure Logo" width="192" height="192"/>
-            <!-- <img  src="/docs/5.1/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"> -->
-            <h1 class="display-6 fw-bold text-primary">Welcome to Azure</h1>            
-          </div>
-        <form method="post" action="{{url_for('hello')}}">
-            <div class="col-md-6 mx-auto text-center">
-                <label for="name" class="form-label fw-bold fs-5">Could you please tell me your name?</label>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Project - ChatGPT with Flask and Longchain</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+        color: #333;
+      }
 
-                <!-- <p class="lead mb-2">Could you please tell me your name?</p> -->
-                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center align-items-center my-1">
-                    <input type="text" class="form-control" id="name" name="name" style="max-width: 256px;">
-                  </div>            
-                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center my-2">
-                  <button type="submit" class="btn btn-primary btn-lg px-4 gap-3">Say Hello</button>
-                </div>            
-            </div>
-        </form>
-     </main>      
-   </body>
+      header {
+        background-color: #3498db;
+        color: #fff;
+        text-align: center;
+        padding: 1em;
+      }
+
+      section {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        color: #3498db;
+      }
+
+      p {
+        line-height: 1.6;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <h1>AI Project - ChatGPT with Flask and Longchain</h1>
+    </header>
+
+    <section>
+      <h2>About the Project</h2>
+      <p>
+        Welcome to my AI project! This project focuses on implementing a chatbot
+        using ChatGPT, a powerful language model developed by OpenAI. The
+        backend is built with Flask, a lightweight web framework, and Longchain,
+        a custom database for managing long conversations efficiently.
+      </p>
+
+      <h2>Flask</h2>
+      <p>
+        Flask is a micro web framework written in Python. It is easy to use and
+        extensible, making it an excellent choice for developing web
+        applications. In this project, Flask handles the communication between
+        the user interface and the ChatGPT model.
+      </p>
+
+      <h2>Longchain</h2>
+      <p>
+        Longchain is a specialized database designed to manage long
+        conversations. It helps in efficiently storing and retrieving
+        conversation histories, making it suitable for chatbot applications with
+        extended interactions.
+      </p>
+
+      <h2>ChatGPT</h2>
+      <p>
+        ChatGPT is a state-of-the-art language model developed by OpenAI. It
+        excels in generating human-like text and is employed in this project to
+        provide natural and context-aware responses in the chatbot interactions.
+      </p>
+    </section>
+  </body>
 </html>

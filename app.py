@@ -141,8 +141,11 @@ def stats():
     total_conversations = len(conversations)
     status = "Running"
 
-    return render_template('stats.html', avg_request_time=avg_request_time, total_conversations=total_conversations, status=status)
+    return render_template('stadts.html', avg_request_time=avg_request_time, total_conversations=total_conversations, status=status)
 
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 # Run the app
 if __name__ == '__main__':
