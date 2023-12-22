@@ -123,14 +123,18 @@ def atsakymas(conversation_id):
 
 @app.route('/create', methods=['POST'])
 def add_conversation():
-    retriever = WikipediaRetriever()
+    #retriever = WikipediaRetriever()
 
-    convo = ConversationChain(llm=OpenAI(temperature=0.7))
-    model = ChatOpenAI(model_name="gpt-3.5-turbo")
-    qa = ConversationalRetrievalChain.from_llm(model, retriever=retriever)
+    #convo = ConversationChain(llm=OpenAI(temperature=0.7))
+    #model = ChatOpenAI(model_name="gpt-3.5-turbo")
+    #qa = ConversationalRetrievalChain.from_llm(model, retriever=retriever)
 
-    conversations.append(convo)
+    conversations.append("convo")
     return jsonify({'id': len(conversations)-1}), 201
+
+@app.route('/ping', methods=['GET'])
+def ping():
+    return jsonify({'answer': "pong"}), 201
 
 @app.route('/stats')
 def stats():
