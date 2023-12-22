@@ -1,6 +1,16 @@
-from flask import Flask
+import os
+from langchain.llms import OpenAI
+from langchain.prompts import PromptTemplate
+from langchain.chains import ConversationChain
+import os
+from langchain.retrievers import WikipediaRetriever
+from langchain.chains import ConversationalRetrievalChain
+from langchain.chat_models import ChatOpenAI
+from flask import Flask, request, jsonify, render_template
+
 
 app = Flask(__name__)
+conversations = []
 
 
 @app.route('/')
