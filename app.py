@@ -70,7 +70,7 @@ templatas_atsakymo = PromptTemplate(
 
 template_toliau = 'Tesk pasakoti apie čią temą'
 
-template_klausimas = 'Atsakyk JSON formatu {' \
+template_klausimas = 'Atsakyk JSON formatu: {' \
                       '"klausimas": "", ' \
                       '"atsakymai": {' \
                       '"A": "", ' \
@@ -79,9 +79,7 @@ template_klausimas = 'Atsakyk JSON formatu {' \
                       '"D": ""' \
                       '}, ' \
                       '"teisingas_atsakymas": ""' \
-                      '}. Is tavo duotos informacijos sugeneruok 1 klausimą su 4 atsakymais A B C D iskuriu tik vienas tesingas, o 3 neteisingi.' 
-
-# Import the Flask module
+                      '} ir daugiau nieko kito. Is tavo duotos informacijos sugeneruok 1 klausimą su 4 atsakymais A B C D iskuriu tik vienas tesingas, o 3 neteisingi.' 
 
 app = Flask(__name__)
 
