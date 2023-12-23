@@ -79,7 +79,7 @@ template_klausimas = 'Atsakyk JSON formatu: {' \
                       '"D": ""' \
                       '}, ' \
                       '"teisingas_atsakymas": ""' \
-                      '} ir daugiau nieko kito. Is tavo duotos informacijos sugeneruok 1 klausimą su 4 atsakymais A B C D iskuriu tik vienas tesingas, o 3 neteisingi.' 
+                      '} ir be json daugiau nieko. Is tavo duotos informacijos sugeneruok 1 klausimą su 4 atsakymais A B C D iskuriu tik vienas tesingas, o 3 neteisingi.' 
 
 app = Flask(__name__)
 
