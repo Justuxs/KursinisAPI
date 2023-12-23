@@ -70,7 +70,7 @@ templatas_atsakymo = PromptTemplate(
 
 template_toliau = 'Tesk pasakoti apie čią temą'
 
-template_klausimas = 'Atsakyk JSON formatu: {' \
+template_klausimas = 'Parasyk atsakyba tik JSON formatu: {' \
                       '"klausimas": "", ' \
                       '"atsakymai": {' \
                       '"A": "", ' \
