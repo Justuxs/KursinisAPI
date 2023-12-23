@@ -50,7 +50,7 @@ class ChatAI(object):
         prompt = templatas_atsakyk.format(klausimas=question, subject=self.subject , scope=self.scope , topic=self.topic)
         print(prompt)
         result = self.wikiConvo({"question": prompt, "chat_history": []})
-        return result
+        return result['answer']
 
 chat_ai = []
 
@@ -166,7 +166,7 @@ def add_conversation():
     wikiConvo = ConversationalRetrievalChain.from_llm(model, retriever=retriever)
     chat_historiy = []
     chat_ai_instance = ChatAI(convo=convo, wikiConvo=wikiConvo, chat_history=chat_historiy)
-    chat_ai.append("www")
+    chat_ai.append(chat_ai_instance)
     return jsonify({'id': len(chat_ai)-1}), 201
 
 @app.route('/ping', methods=['GET'])
