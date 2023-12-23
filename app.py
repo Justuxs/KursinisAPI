@@ -161,11 +161,11 @@ def atsakymas(conversation_id):
 @app.route('/create', methods=['POST'])
 def add_conversation():
     retriever = WikipediaRetriever()
-    #convo = ConversationChain(llm=OpenAI(temperature=0.5))
-    #model = ChatOpenAI(model_name="gpt-3.5-turbo")
-    #wikiConvo = ConversationalRetrievalChain.from_llm(model, retriever=retriever)
-    #chat_historiy = []
-    #chat_ai_instance = ChatAI(convo=convo, wikiConvo=wikiConvo, chat_history=chat_historiy)
+    convo = ConversationChain(llm=OpenAI(temperature=0.5))
+    model = ChatOpenAI(model_name="gpt-3.5-turbo")
+    wikiConvo = ConversationalRetrievalChain.from_llm(model, retriever=retriever)
+    chat_historiy = []
+    chat_ai_instance = ChatAI(convo=convo, wikiConvo=wikiConvo, chat_history=chat_historiy)
     chat_ai.append("www")
     return jsonify({'id': len(chat_ai)-1}), 201
 
@@ -187,6 +187,10 @@ def stats():
 def index():
     return render_template('index.html')
 
+@app.errorhandler(Exception)
+def handle_error(error):
+    response = {'error': str(error)}
+    return jsonify(response), 500 
 # Run the app
 if __name__ == '__main__':
     app.run(debug=True)
