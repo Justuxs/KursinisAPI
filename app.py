@@ -163,14 +163,15 @@ def add_conversation():
     retriever = WikipediaRetriever()
     convo = ConversationChain(llm=OpenAI(temperature=0.5))
     model = ChatOpenAI(model_name="gpt-3.5-turbo")
-    wikiConvo = ConversationalRetrievalChain.from_llm(model, retriever=retriever)
-    chat_historiy = []
-    chat_ai_instance = ChatAI(convo=convo, wikiConvo=wikiConvo, chat_history=chat_historiy)
-    chat_ai.append(chat_ai_instance)
+    #wikiConvo = ConversationalRetrievalChain.from_llm(model, retriever=retriever)
+    #chat_historiy = []
+    #chat_ai_instance = ChatAI(convo=convo, wikiConvo=wikiConvo, chat_history=chat_historiy)
+    chat_ai.append("www")
     return jsonify({'id': len(chat_ai)-1}), 201
 
 @app.route('/ping', methods=['GET'])
 def ping():
+    
     return jsonify({'answer': "pong"}), 201
 
 @app.route('/stats')
