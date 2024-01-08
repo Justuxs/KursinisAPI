@@ -28,7 +28,8 @@ class ChatAI(object):
         self.topic = topic
 
         
-    def generate_start(self, prompt):
+    def generate(self):
+        prompt = template_start.format(subject=self.subject, scope=self.scope, topic=self.topic)
         response = self.convo.run(prompt)
         self.chat_history.append({"Klausimas": prompt, "Atsakymas": response})
         return response
@@ -54,34 +55,34 @@ class ChatAI(object):
 
 chat_ai = []
 
-templatas = PromptTemplate(
+template_start = PromptTemplate(
     input_variables=['subject', 'scope', 'topic'],
-    template="Tu esi mokytojas robotas, kuris duoda informacijos astuntokui. Dabar papasakok astuntokui apie is {subject} -> {scope} temos apie {topic}. Informacija turi buti lengvai suprantama ir nebendrauk su mokyniu;"
+    template="Tu esi mokytojas robotas, kuris duoda informacijos aštuntokui. Dabar papasakok aštuntokui iš {subject} -> {scope} temos apie {topic}. Informacija turi būti jam lengvai suprantama."
 )
 templatas_atsakyk = PromptTemplate(
     input_variables=['klausimas','subject','scope','topic'],
-    template="Trumpai atsakyk i mano klausima: {klausimas}. Jei klausimas yra neetiskas arba yra neiškonteksto (ne apie šią temą {subject}-> {scope} -> {topic}) atskyk - I toki kalusima negaliu atsakyti"
+    template="Trumpai atsakyk į mano klausimą: {klausimas}. Jei klausimas yra netinkamas arba yra ne iš konteksto (ne apie šią temą {subject}-> {scope} -> {topic}) atsakyk - į tokį klausimą negaliu atsakyti"
 )
 
 templatas_atsakymo = PromptTemplate(
     input_variables=['atsakymas'],
-    template="As manau, kad atsakymas yra {atsakymas}. Pasakyk ar gerai as atsakiau. Jei blogai paiskink koks turėjo buti atsakymas ir kodėl šitas blogas."
+    template="Mokinys mano, kad atsakymas yra {atsakymas}. Pasakyk ar gerai atsakė. Jei blogai paaiškink koks turėjo būti atsakymas ir kodėl šitas blogas."
 )
 
-template_toliau = 'Tesk pasakoti apie čią temą'
+template_toliau = 'Tęsk pasakoti apie šią temą'
 
-template_klausimas = 'Sugeneruota atsakyma turesi pateikti json formatu, kad programa galėtu suprasti -> Iš tavo pateiktos informacijos sugeneruok vieną klausimą su keturiais atsakymais A, B, C ir D, kuriuose tik vienas yra teisingas ir pateik atsakymą tik tokių JSON formatu: {"klausimas": "", "atsakymai": {"A": "", "B": "", "C": "", "D": ""}, "teisingas_atsakymas": ""} , be jo daugiau jokių žodžių nepateik.'
+template_klausimas = 'Sugeneruota atsakymą turėsi pateikti JSON formatu, kad programa galėtu suprasti -> Iš tavo pateiktos informacijos sugeneruok vieną klausimą su keturiais atsakymais A, B, C ir D, kuriuose tik vienas yra teisingas ir pateik atsakymą tik tokių JSON formatu: {"klausimas": "", "atsakymai": {"A": "", "B": "", "C": "", "D": ""}, "teisingas_atsakymas": ""} , be jo daugiau jokių žodžių nepateik.'
 
 app = Flask(__name__)
 
-# Define a controller function for the endpoint that takes a body object
 @app.route('/generuok/<int:conversation_id>', methods=['POST'])
-def controller(conversation_id):
+def generate(conversation_id):
     if(conversation_id>len(chat_ai)):
         return jsonify({'message': 'Bad params'}), 400
     body = request.get_json()
     if not body or not isinstance(body, dict):
         return jsonify({'error': 'Invalid body object'}), 400
+    
     subject = body.get('subject')
     scope = body.get('scope')
     topic = body.get('topic')
@@ -90,13 +91,9 @@ def controller(conversation_id):
             topic, str):
         return jsonify({'error': 'Invalid subject, scope or topic'}), 400
     
-    prompt = templatas.format(subject=subject, scope=scope, topic=topic)
-    print(prompt)
     chat_ai[conversation_id].setTheme(subject,scope,topic)
-    response = chat_ai[conversation_id].generate_start(prompt)
+    response = chat_ai[conversation_id].generate()
     
-    print(response)
-
     return jsonify({'response': response}), 200
 
 @app.route('/atsakyk/<int:conversation_id>', methods=['POST'])
@@ -118,7 +115,6 @@ def atsakyk(conversation_id):
     return jsonify({'response': response}), 200
 
 
-# Define a controller function for the endpoint that gives more information
 @app.route('/toliau/<int:conversation_id>', methods=['GET'])
 def toliau(conversation_id):
     if(conversation_id>len(chat_ai)):
