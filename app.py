@@ -146,11 +146,11 @@ def atsakymas(conversation_id):
 @app.route('/create', methods=['POST'])
 def add_conversation():
     retriever = WikipediaRetriever()
-    llm = ChatOpenAI(temperature=0.5, model="gpt-3.5-turbo-instruct", openai_api_key=openai_api_key)
+    llm = ChatOpenAI(temperature=0.5, model="gpt-3.5-turbo-1106")
     llm2 = OpenAI(temperature=.7)
 
     convo = ConversationChain(llm=llm)
-    model = ChatOpenAI(model_name="gpt-3.5-turbo-instruct")
+    model = ChatOpenAI(model_name="gpt-3.5-turbo-1106")
     wikiConvo = ConversationalRetrievalChain.from_llm(model, retriever=retriever)
     chat_historiy = []
     chat_ai_instance = ChatAI(convo=convo, wikiConvo=wikiConvo, chat_history=chat_historiy)
