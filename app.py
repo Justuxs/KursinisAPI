@@ -7,8 +7,8 @@ from langchain.chains import ConversationalRetrievalChain
 from langchain.chat_models import ChatOpenAI
 from flask import Flask, request, jsonify, render_template
 
-os.environ['OPENAI_API_KEY'] = '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'
-openai_api_key = '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'
+os.environ['OPENAI_API_KEY'] = 'SETTINAMAS PER ENDPOINTA' 
+
 class ChatAI(object):
     convo = ConversationChain
     wikiConvo = ConversationalRetrievalChain
@@ -147,8 +147,6 @@ def atsakymas(conversation_id):
 def add_conversation():
     retriever = WikipediaRetriever()
     llm = ChatOpenAI(temperature=0.5, model="gpt-3.5-turbo-1106")
-    llm2 = OpenAI(temperature=.7)
-
     convo = ConversationChain(llm=llm)
     model = ChatOpenAI(model_name="gpt-3.5-turbo-1106")
     wikiConvo = ConversationalRetrievalChain.from_llm(model, retriever=retriever)
@@ -174,6 +172,16 @@ def stats():
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/key', methods=['POST'])
+def set_api_key():
+    body = request.get_json()
+    if not body or not isinstance(body, dict):
+        return jsonify({'error': 'Invalid body object'}), 400
+    api_key = body.get('api_key')
+    os.environ['OPENAI_API_KEY'] = api_key
+    print(api_key)
+    return 'API key set successfully'
 
 @app.errorhandler(Exception)
 def handle_error(error):
