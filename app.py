@@ -7,8 +7,8 @@ from langchain.chains import ConversationalRetrievalChain
 from langchain.chat_models import ChatOpenAI
 from flask import Flask, request, jsonify, render_template
 
-os.environ['OPENAI_API_KEY'] = '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'
-openai_api_key = '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'
+os.environ['OPENAI_API_KEY'] = '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'
+openai_api_key = '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'
 class ChatAI(object):
     convo = ConversationChain
     wikiConvo = ConversationalRetrievalChain
@@ -146,9 +146,11 @@ def atsakymas(conversation_id):
 @app.route('/create', methods=['POST'])
 def add_conversation():
     retriever = WikipediaRetriever()
-    llm = ChatOpenAI(temperature=0.1, model="gpt-3.5-turbo", openai_api_key=openai_api_key)
+    llm = ChatOpenAI(temperature=0.5, model="gpt-3.5-turbo-instruct", openai_api_key=openai_api_key)
+    llm2 = OpenAI(temperature=.7)
+
     convo = ConversationChain(llm=llm)
-    model = ChatOpenAI(model_name="gpt-3.5-turbo")
+    model = ChatOpenAI(model_name="gpt-3.5-turbo-instruct")
     wikiConvo = ConversationalRetrievalChain.from_llm(model, retriever=retriever)
     chat_historiy = []
     chat_ai_instance = ChatAI(convo=convo, wikiConvo=wikiConvo, chat_history=chat_historiy)
