@@ -7,7 +7,7 @@ from langchain.chains import ConversationalRetrievalChain
 from langchain.chat_models import ChatOpenAI
 from flask import Flask, request, jsonify, render_template
 
-os.environ['OPENAI_API_KEY'] = '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'
+os.environ['OPENAI_API_KEY'] = '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'
 
 class ChatAI(object):
     convo = ConversationChain
