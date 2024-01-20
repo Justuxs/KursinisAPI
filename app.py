@@ -1,4 +1,5 @@
 import os
+import copy
 from langchain.llms import OpenAI
 from langchain.prompts import PromptTemplate
 from langchain.chains import ConversationChain
@@ -7,11 +8,13 @@ from langchain.chains import ConversationalRetrievalChain
 from langchain.chat_models import ChatOpenAI
 from flask import Flask, request, jsonify, render_template
 
-os.environ['OPENAI_API_KEY'] = 'SETTINAMAS PER ENDPOINTA' 
+os.environ['OPENAI_API_KEY'] = '' 
 
 class ChatAI(object):
     convo = ConversationChain
+    chain_copy = ConversationChain
     wikiConvo = ConversationalRetrievalChain
+    isGenerated = True
     chat_history = []
     subject = ""
     scope = ""
@@ -32,19 +35,26 @@ class ChatAI(object):
         prompt = template_start.format(subject=self.subject, scope=self.scope, topic=self.topic)
         response = self.convo.run(prompt)
         self.chat_history.append({"Klausimas": prompt, "Atsakymas": response})
+        self.isGenerated = True
         return response
     
     def generate_next(self, prompt):
         response = self.convo.run(prompt)
         self.chat_history.append({"Klausimas": prompt, "Atsakymas": response})
+        self.isGenerated = True
         return response
 
     def generate_question(self):
-        response = self.convo.run(template_klausimas)
+        if(self.isGenerated):
+            self.isGenerated = False
+            self.chain_copy = copy.deepcopy(self.convo)
+            response =  self.chain_copy.run(template_klausimas)
+        else:
+            response =  self.chain_copy.run(template_next_klausimas)
         return response
     
     def generate_question_answer(self, prompt):
-        response = self.convo.run(prompt)
+        response =  self.chain_copy.run(prompt)
         return response
     
     def generate_answer(self, question):
@@ -57,7 +67,7 @@ chat_ai = []
 
 template_start = PromptTemplate(
     input_variables=['subject', 'scope', 'topic'],
-    template="Tu esi mokytojas robotas, kuris duoda informacijos aštuntokui. Dabar papasakok aštuntokui iš {subject} -> {scope} temos apie {topic}. Informacija turi būti jam lengvai suprantama."
+    template="Tu mokytojas robotas, kuris duoda informacijos aštuntokui. Dabar klasėje mokai aštuntoką iš {subject} -> {scope} temos apie {topic}. Pateik informaciją."
 )
 templatas_atsakyk = PromptTemplate(
     input_variables=['klausimas','subject','scope','topic'],
@@ -69,9 +79,10 @@ templatas_atsakymo = PromptTemplate(
     template="Mokinys mano, kad atsakymas yra {atsakymas}. Pasakyk ar gerai atsakė. Jei blogai paaiškink koks turėjo būti atsakymas ir kodėl šitas blogas."
 )
 
-template_toliau = 'Tęsk pasakoti apie šią temą'
+template_toliau = 'Tu esi toliau mokytojas robotas, generuok toliau mokamają medžiagą.'
 
 template_klausimas = 'Sugeneruota atsakymą turėsi pateikti JSON formatu, kad programa galėtu suprasti -> Iš tavo pateiktos informacijos sugeneruok vieną klausimą su keturiais atsakymais A, B, C ir D, kuriuose tik vienas yra teisingas ir pateik atsakymą tik tokių JSON formatu: {"klausimas": "", "atsakymai": {"A": "", "B": "", "C": "", "D": ""}, "teisingas_atsakymas": ""} , be jo daugiau jokių žodžių nepateik.'
+template_next_klausimas = 'Sugeneruota atsakymą turėsi pateikti JSON formatu, kad programa galėtu suprasti -> Iš tavo pateiktos informacijos sugeneruok kitą klausimą su keturiais atsakymais A, B, C ir D, kuriuose tik vienas yra teisingas ir pateik atsakymą tik tokių JSON formatu: {"klausimas": "", "atsakymai": {"A": "", "B": "", "C": "", "D": ""}, "teisingas_atsakymas": ""} , be jo daugiau jokių žodžių nepateik.'
 
 app = Flask(__name__)
 
